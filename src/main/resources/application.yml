@@ -34,3 +34,8 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:/mapper/**/*.xml
+
+aliyun.oss.endpoint: 你的阿里云 endpoint
+aliyun.oss.accessKeyId: 你的阿里云 accessKeyId
+aliyun.oss.secret: 你的阿里云 secret
+aliyun.oss.bucket: 你的阿里云 bucket

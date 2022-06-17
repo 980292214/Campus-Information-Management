@@ -6,6 +6,7 @@ import com.le.myzhxy.pojo.LoginForm;
 import com.le.myzhxy.pojo.Student;
 import com.le.myzhxy.pojo.Teacher;
 import com.le.myzhxy.service.AdminService;
+import com.le.myzhxy.service.FileService;
 import com.le.myzhxy.service.StudentService;
 import com.le.myzhxy.service.TeacherService;
 import com.le.myzhxy.util.*;
@@ -38,6 +39,8 @@ public class SystemController {
     private StudentService studentService;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private FileService fileService;
 
     /*
 
@@ -119,33 +122,42 @@ public class SystemController {
     }
 
 
+//    // POST /sms/system/headerImgUpload
+//    @ApiOperation("文件上传统一入口,上传到本地")
+//    @PostMapping("/headerImgUpload")
+//    public Result headerImgUpload(
+//            @ApiParam("头像文件") @RequestPart("multipartFile") MultipartFile multipartFile
+//            ,
+//            HttpServletRequest request
+//    ) {
+//
+//        String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+//        String originalFilename = multipartFile.getOriginalFilename();
+//        int i = originalFilename.lastIndexOf(".");
+//        String newFileName = uuid.concat(originalFilename.substring(i));//.concat就是+
+//
+//        // 保存文件 将文件发送到第三方/独立的图片服务器上,--6.16
+//        String portraitPath = "E:\\学习\\尚硅谷\\代码文件\\2022智慧校园\\target\\classes\\public\\upload\\".concat(newFileName);
+//        try {
+//            multipartFile.transferTo(new File(portraitPath));
+//        } catch (IOException e) {
+//            System.out.println("上传头像失败！");
+//            e.printStackTrace();
+//        }
+//        // 响应图片的路径
+//        String path = "upload/".concat(newFileName);
+//        return Result.ok(path);
+//    }
+
     // POST /sms/system/headerImgUpload
-    @ApiOperation("文件上传统一入口")
+    @ApiOperation("文件上传统一入口,上传到阿里云")
     @PostMapping("/headerImgUpload")
     public Result headerImgUpload(
             @ApiParam("头像文件") @RequestPart("multipartFile") MultipartFile multipartFile
-            ,
-            HttpServletRequest request
     ) {
-
-        String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-        String originalFilename = multipartFile.getOriginalFilename();
-        int i = originalFilename.lastIndexOf(".");
-        String newFileName = uuid.concat(originalFilename.substring(i));//.concat就是+
-
-        // 保存文件 将文件发送到第三方/独立的图片服务器上,--6.16
-        String portraitPath = "E:\\学习\\尚硅谷\\代码文件\\2022智慧校园\\target\\classes\\public\\upload\\".concat(newFileName);
-        try {
-            multipartFile.transferTo(new File(portraitPath));
-        } catch (IOException e) {
-            System.out.println("上传头像失败！");
-            e.printStackTrace();
-        }
-
-
+        String url = fileService.upload(multipartFile);
         // 响应图片的路径
-        String path = "upload/".concat(newFileName);
-        return Result.ok(path);
+        return Result.ok(url);
     }
 
 
